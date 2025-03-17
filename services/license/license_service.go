@@ -15,8 +15,8 @@ import (
 )
 
 type LicenseService interface {
-	InsertLicense(r *http.Request) (result dto.Response, err error)
-	ViewDetail(r *http.Request) (result dto.Response, err error)
+	InsertLicense(r *http.Request, contextModel *dto.UserContext) (result dto.Response, err error)
+	ViewDetail(r *http.Request, contextModel *dto.UserContext) (result dto.Response, err error)
 }
 
 type licenseService struct {

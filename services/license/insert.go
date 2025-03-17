@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-func (l *licenseService) InsertLicense(r *http.Request) (result dto.Response, err error) {
+func (l *licenseService) InsertLicense(r *http.Request, ctx *dto.UserContext) (result dto.Response, err error) {
 	var inputStruct in.LicenseDtoRequest
 	var resultInsert int64
 	inputStruct, err = l.ReadBody(r)

@@ -9,7 +9,7 @@ import (
 	"net/http"
 )
 
-func (l *licenseService) ViewDetail(r *http.Request) (result dto.Response, err error) {
+func (l *licenseService) ViewDetail(r *http.Request, ctx *dto.UserContext) (result dto.Response, err error) {
 	var inputStruct in.LicenseDtoRequest
 	inputStruct, err = l.ReadBody(r)
 	if err != nil {
