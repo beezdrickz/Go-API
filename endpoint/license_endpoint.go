@@ -1,6 +1,7 @@
 package endpoint
 
 import (
+	"go-api-frame/endpoint/utils"
 	"go-api-frame/services/license"
 	"net/http"
 )
@@ -18,7 +19,7 @@ func NewLicenseEndpoint(licenseService license.LicenseService) *LicenseEndpoint 
 func (l *LicenseEndpoint) EndpointWithoutParam(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "POST":
-		writeHttpResponseResult(false, w, r, l.licenseService.InsertLicense)
+		utils.WriteHttpResponseResult(false, w, r, l.licenseService.InsertLicense)
 	case "GET":
 	}
 }
@@ -26,6 +27,14 @@ func (l *LicenseEndpoint) EndpointWithoutParam(w http.ResponseWriter, r *http.Re
 func (l *LicenseEndpoint) EndpointWithParam(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
-		writeHttpResponseResult(true, w, r, l.licenseService.ViewDetail)
+		utils.WriteHttpResponseResult(true, w, r, l.licenseService.ViewDetail)
+	}
+}
+
+func (l *LicenseEndpoint) EndpointWithFile(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case "POST":
+		utils.WriteMultipartHttpResponseResult(false, w, r, l.licenseService.InsertLicenseWithFile)
+	case "GET":
 	}
 }

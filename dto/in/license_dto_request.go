@@ -1,12 +1,20 @@
 package in
 
-import "errors"
+import (
+	"errors"
+	"go-api-frame/dto"
+)
 
 type LicenseDtoRequest struct {
 	ID          int64  `json:"id"`
 	MachineUUID string `json:"machine_uuid" validate:"required"`
 	PublicKey   string `json:"public_key" validate:"required"`
 	StoreID     int64  `json:"store_id" validate:"required,min=1"`
+}
+
+type LicenseFileDTORequest struct {
+	FileLicense dto.FileDTO
+	LicenseDTO  LicenseDtoRequest
 }
 
 func (l *LicenseDtoRequest) ValidateInsert() (err error) {

@@ -17,6 +17,7 @@ import (
 
 type LicenseService interface {
 	InsertLicense(r interface{}, contextModel *dto.UserContext) (result dto.Response, err error)
+	InsertLicenseWithFile(r interface{}, contextModel *dto.UserContext) (result dto.Response, err error)
 	ViewDetail(r interface{}, contextModel *dto.UserContext) (result dto.Response, err error)
 }
 
@@ -34,6 +35,14 @@ func NewLicenseService(db *sql.DB, dao dao.LicenseDao) LicenseService {
 
 func mapToStructDTO(data interface{}, result *in.LicenseDtoRequest) (err error) {
 	err = services.MapToStruct(data, &result)
+	if err != nil {
+		return
+	}
+	return
+}
+
+func mapToStructMultipartDTO(data interface{}, result *in.LicenseFileDTORequest) (err error) {
+	err = services.MapToStructMultipart(data, &result.LicenseDTO, &result.FileLicense)
 	if err != nil {
 		return
 	}
