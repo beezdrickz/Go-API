@@ -26,6 +26,6 @@ func (l *LicenseEndpoint) EndpointWithoutParam(w http.ResponseWriter, r *http.Re
 func (l *LicenseEndpoint) EndpointWithParam(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
-		writeHttpResponseResult(false, w, r, l.licenseService.ViewDetail)
+		writeHttpResponseResult(true, w, r, l.licenseService.ViewDetail)
 	}
 }

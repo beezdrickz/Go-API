@@ -2,24 +2,35 @@ package license
 
 import (
 	"database/sql"
+	"errors"
+	"fmt"
 	"go-api-frame/dto"
 	"go-api-frame/dto/in"
 	"go-api-frame/repository"
-	"net/http"
 	"time"
+
+	"github.com/go-playground/validator/v10"
 )
 
-func (l *licenseService) InsertLicense(r *http.Request, ctx *dto.UserContext) (result dto.Response, err error) {
+func (l *licenseService) InsertLicense(r interface{}, ctx *dto.UserContext) (result dto.Response, err error) {
 	var inputStruct in.LicenseDtoRequest
 	var resultInsert int64
-	inputStruct, err = l.ReadBody(r)
+
+	err = mapToStructDTO(r, &inputStruct)
 	if err != nil {
 		return
 	}
+
+	err = validateInsertDTO(inputStruct)
+	if err != nil {
+		return
+	}
+
 	resultInsert, err = l.doInsertLicense(inputStruct)
 	if err != nil {
 		return
 	}
+
 	result.Message = "Success Insert Data License"
 	result.Result = resultInsert
 	return
@@ -57,6 +68,22 @@ func (l *licenseService) doInsertLicense(inputStruct in.LicenseDtoRequest) (resu
 
 	if err != nil {
 		return
+	}
+	return
+}
+
+func validateInsertDTO(inputStruct in.LicenseDtoRequest) (err error) {
+	validate := validator.New()
+	err = validate.Struct(inputStruct)
+	if err != nil {
+		for _, e := range err.(validator.ValidationErrors) {
+			err = errors.New(
+				fmt.Sprintf(
+					`Validation failed for: %s Error: %s`, e.StructField(), e.Tag(),
+				),
+			)
+			return
+		}
 	}
 	return
 }

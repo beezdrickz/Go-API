@@ -7,6 +7,7 @@ import (
 	"go-api-frame/dao"
 	"go-api-frame/dto"
 	"go-api-frame/dto/in"
+	"go-api-frame/services"
 	"io"
 	"net/http"
 	"strconv"
@@ -15,8 +16,8 @@ import (
 )
 
 type LicenseService interface {
-	InsertLicense(r *http.Request, contextModel *dto.UserContext) (result dto.Response, err error)
-	ViewDetail(r *http.Request, contextModel *dto.UserContext) (result dto.Response, err error)
+	InsertLicense(r interface{}, contextModel *dto.UserContext) (result dto.Response, err error)
+	ViewDetail(r interface{}, contextModel *dto.UserContext) (result dto.Response, err error)
 }
 
 type licenseService struct {
@@ -29,6 +30,14 @@ func NewLicenseService(db *sql.DB, dao dao.LicenseDao) LicenseService {
 		db:         db,
 		licenseDao: dao,
 	}
+}
+
+func mapToStructDTO(data interface{}, result *in.LicenseDtoRequest) (err error) {
+	err = services.MapToStruct(data, &result)
+	if err != nil {
+		return
+	}
+	return
 }
 
 func (l *licenseService) ReadBody(r *http.Request) (result in.LicenseDtoRequest, err error) {

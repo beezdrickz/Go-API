@@ -6,12 +6,11 @@ import (
 	"go-api-frame/dto/in"
 	"go-api-frame/dto/out"
 	"go-api-frame/repository"
-	"net/http"
 )
 
-func (l *licenseService) ViewDetail(r *http.Request, ctx *dto.UserContext) (result dto.Response, err error) {
+func (l *licenseService) ViewDetail(r interface{}, ctx *dto.UserContext) (result dto.Response, err error) {
 	var inputStruct in.LicenseDtoRequest
-	inputStruct, err = l.ReadBody(r)
+	err = mapToStructDTO(r, &inputStruct)
 	if err != nil {
 		return
 	}

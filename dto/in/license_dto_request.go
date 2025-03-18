@@ -4,9 +4,9 @@ import "errors"
 
 type LicenseDtoRequest struct {
 	ID          int64  `json:"id"`
-	MachineUUID string `json:"machine_uuid"`
-	PublicKey   string `json:"public_key"`
-	StoreID     int64  `json:"store_id"`
+	MachineUUID string `json:"machine_uuid" validate:"required"`
+	PublicKey   string `json:"public_key" validate:"required"`
+	StoreID     int64  `json:"store_id" validate:"required,min=1"`
 }
 
 func (l *LicenseDtoRequest) ValidateInsert() (err error) {
