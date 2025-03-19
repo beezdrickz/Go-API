@@ -53,6 +53,8 @@ func MapToStructMultipart(data interface{}, result interface{}, resultFile *dto.
 	}
 	return nil
 }
+
+// to be adjust again
 func SaveFileFromDTO(resultFile *dto.FileDTO, saveDirectory string, contextModel *dto.UserContext) error {
 	// Ensure the save directory exists
 	err := os.MkdirAll(saveDirectory, os.ModePerm)
