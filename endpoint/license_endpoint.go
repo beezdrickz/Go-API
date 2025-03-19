@@ -19,8 +19,16 @@ func NewLicenseEndpoint(licenseService license.LicenseService) *LicenseEndpoint 
 func (l *LicenseEndpoint) EndpointWithoutParam(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "POST":
-		utils.WriteHttpResponseResult(false, w, r, l.licenseService.InsertLicense)
+		utils.WriteHttpResponseResult(true, w, r, l.licenseService.InsertLicense)
 	case "GET":
+		utils.WriteHttpResponseResult(true, w, r, l.licenseService.GetList)
+	}
+}
+
+func (l *LicenseEndpoint) EndpointCount(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case "GET":
+		utils.WriteHttpResponseResult(true, w, r, l.licenseService.GetCount)
 	}
 }
 

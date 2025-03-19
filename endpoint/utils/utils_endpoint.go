@@ -133,7 +133,12 @@ func extractParam(
 ) {
 	for key, values := range r.URL.Query() {
 		if len(values) > 0 {
-			(*requestBody)[key] = values[0]
+			if key == "page" || key == "limit" {
+				numValue, _ := strconv.Atoi(values[0])
+				(*requestBody)[key] = int64(numValue)
+			} else {
+				(*requestBody)[key] = values[0]
+			}
 		}
 	}
 	vars := mux.Vars(r)

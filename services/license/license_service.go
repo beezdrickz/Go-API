@@ -19,6 +19,8 @@ type LicenseService interface {
 	InsertLicense(r interface{}, contextModel *dto.UserContext) (result dto.Response, err error)
 	InsertLicenseWithFile(r interface{}, contextModel *dto.UserContext) (result dto.Response, err error)
 	ViewDetail(r interface{}, contextModel *dto.UserContext) (result dto.Response, err error)
+	GetList(r interface{}, contextModel *dto.UserContext) (result dto.Response, err error)
+	GetCount(r interface{}, contextModel *dto.UserContext) (result dto.Response, err error)
 }
 
 type licenseService struct {

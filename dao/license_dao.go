@@ -12,6 +12,8 @@ type LicenseDao interface {
 	CheckExistingLicense(tx *sql.Tx, licenseKey string) (result int64, err error)
 	CheckLicenseAndMachine(model repository.LicenseModel) (result bool, err error)
 	ViewDetail(id int64) (result repository.LicenseModel, err error)
+	ListLicense(page, limit int64, filter string) (result []repository.LicenseModel, err error)
+	CountLicense(filter string) (result int64, err error)
 }
 
 type licenseDAO struct {
@@ -100,4 +102,48 @@ func (d *licenseDAO) ViewDetail(id int64) (result repository.LicenseModel, err e
 		}
 	}
 	return
+}
+
+func (d *licenseDAO) ListLicense(page, limit int64, filter string) (result []repository.LicenseModel, err error) {
+	query := fmt.Sprintf(`SELECT id, machine_uuid, license_key, store_id 
+	FROM %s `, d.tableName)
+	if filter != "" {
+		query += ""
+	}
+	query += pageLimitQuery(page, limit)
+	param := []interface{}{}
+	rows, err := d.db.Query(query, param...)
+	if err != nil {
+		return
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var temp repository.LicenseModel
+		err = rows.Scan(&temp.ID, &temp.MachineUUID, &temp.LicenseKey, &temp.StoreID)
+		if err != nil {
+			return
+		}
+		result = append(result, temp)
+	}
+	return
+}
+
+func (d *licenseDAO) CountLicense(filter string) (result int64, err error) {
+	// need to add query filter like where query manually
+	query := countQuery(d.tableName, filter)
+	err = d.db.QueryRow(query, []interface{}{}...).Scan(&result)
+	if err != nil {
+		return
+	}
+	return
+}
+
+func pageLimitQuery(page, limit int64) string {
+	return fmt.Sprintf(` LIMIT %d OFFSET %d `, limit, (limit * (page - 1)))
+}
+
+func countQuery(tableName, filter string) string {
+	return fmt.Sprintf(`SELECT COUNT(*) FROM %s %s `, tableName, filter)
 }

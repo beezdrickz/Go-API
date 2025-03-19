@@ -23,7 +23,8 @@ func NewLicenseController(router *mux.Router, endpoint *endpoint.LicenseEndpoint
 
 // Setup Routes
 func (lc *LicenseController) RegisterRoutes() {
-	lc.router.HandleFunc("/", lc.licenseEndpoint.EndpointWithoutParam).Methods("POST", "GET", "OPTION")
+	lc.router.HandleFunc("", lc.licenseEndpoint.EndpointWithoutParam).Methods("POST", "GET", "OPTION")
+	lc.router.HandleFunc("/count", lc.licenseEndpoint.EndpointCount).Methods("GET", "OPTION")
 	lc.router.HandleFunc("/file", lc.licenseEndpoint.EndpointWithFile).Methods("POST", "OPTION")
 	lc.router.HandleFunc("/{ID}", lc.licenseEndpoint.EndpointWithParam).Methods("GET", "OPTION")
 }
