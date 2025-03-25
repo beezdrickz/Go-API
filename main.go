@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"go-api-frame/config"
+	"go-api-frame/controller"
 	"go-api-frame/initiate_dependency"
 	"go-api-frame/logger"
 	"net/http"
@@ -19,6 +20,7 @@ func main() {
 	defer config.Close()
 
 	router := mux.NewRouter()
+	router.Use(controller.CorsMiddleware)
 	apiRouter := router.PathPrefix("/test/api/v1").Subrouter()
 
 	//for initiate all DI
